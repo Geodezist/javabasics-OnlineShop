@@ -6,5 +6,5 @@ import ua.com.bpgdev.onlineshop.security.entity.UserRole;
 public interface UserDao {
     User getUser(String login);
 
-    void add(String login, String password, UserRole role);
+    void add(User user);
 }

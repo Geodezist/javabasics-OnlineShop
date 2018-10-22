@@ -46,19 +46,18 @@ public class JdbcUserDao implements UserDao {
     }
 
     @Override
-    public void add(String login, String password, UserRole role) {
+    public void add(User user) {
         try (PreparedStatement preparedStatement = connection.prepareStatement(ADD_USER)) {
-            PasswordEntity passwordEntity = PasswordHashFactory.generatePasswordEntity(password);
 
-            preparedStatement.setString(1, login);
-            preparedStatement.setString(2, passwordEntity.getPasswordHash());
-            preparedStatement.setString(3, passwordEntity.getSalt());
-            preparedStatement.setInt(4, passwordEntity.getIterations());
-            preparedStatement.setString(5, role.toString());
+            preparedStatement.setString(1, user.getLogin());
+            preparedStatement.setString(2, user.getPasswordHash());
+            preparedStatement.setString(3, user.getSalt());
+            preparedStatement.setInt(4, user.getIterations());
+            preparedStatement.setString(5, user.getUserRole().toString());
 
             preparedStatement.executeUpdate();
 
-        } catch (SQLException | NoSuchAlgorithmException | InvalidKeySpecException e){
+        } catch (SQLException e){
             throw new RuntimeException(e);
         }
     }

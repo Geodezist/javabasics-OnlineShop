@@ -32,6 +32,7 @@ public class Starter {
         //    - Login/Logout
         LoginServlet loginServlet = new LoginServlet(securityService);
         LogoutServlet logoutServlet = new LogoutServlet();
+        RegisterUserServlet registerUserServlet = new RegisterUserServlet(defaultUserService);
 
         //    - Products
         AllProductsServlet allProductsServlet = new AllProductsServlet(defaultProductService);
@@ -44,11 +45,12 @@ public class Starter {
         // Server config
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
         //    - Servlets holders
-        //context.addServlet(new ServletHolder(allProductsServlet), "/");
+        context.addServlet(new ServletHolder(allProductsServlet), "/");
         context.addServlet(new ServletHolder(assetsServlet), "/assets/*");
 
         context.addServlet(new ServletHolder(loginServlet), "/login");
         context.addServlet(new ServletHolder(logoutServlet), "/logout");
+        context.addServlet(new ServletHolder(registerUserServlet), "/register");
 
         context.addServlet(new ServletHolder(allProductsServlet), "/products");
         context.addServlet(new ServletHolder(getProductServlet), "/product/*");
@@ -60,7 +62,7 @@ public class Starter {
         AdminSecurityFilter adminSecurityFilter = new AdminSecurityFilter(securityService);
         context.addFilter(new FilterHolder(adminSecurityFilter), "/product/*", EnumSet.of(DispatcherType.REQUEST));
         UserSecurityFilter userSecurityFilter = new UserSecurityFilter(securityService);
-        context.addFilter(new FilterHolder(userSecurityFilter), "/products", EnumSet.of(DispatcherType.REQUEST));
+        context.addFilter(new FilterHolder(userSecurityFilter), "/*", EnumSet.of(DispatcherType.REQUEST));
 
         Server server = new Server(8080);
         server.setHandler(context);

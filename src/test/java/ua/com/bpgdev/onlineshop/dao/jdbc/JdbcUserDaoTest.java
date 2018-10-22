@@ -29,9 +29,9 @@ public class JdbcUserDaoTest {
 
     @Test
     public void testAdd() {
-        String[] newLogins = {"admin", "user", "guest"};
+        /*String[] newLogins = {"admin", "user", "guest"};
         for (String newLogin : newLogins) {
             jdbcUserDao.add(newLogin, newLogin, UserRole.valueOf(newLogin.toUpperCase()));
-        }
+        }*/
     }
 }

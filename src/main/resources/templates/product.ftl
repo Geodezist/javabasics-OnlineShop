@@ -3,7 +3,7 @@
 <head>
     <#include "bootstrapheader.ftl">
     <link rel="stylesheet" href="/assets/css/style.css">
-    <title>Hello, world!</title>
+    <title><#if product??>${product.name} card<#else>Product is absent</#if></title>
 </head>
 <body>
 <#include "header.ftl">
@@ -21,7 +21,6 @@
 
 <#else>Product is absent</#if>
 <br>
-
 <#include "footer.ftl">
 <#include "bootstrapfooter.ftl">
 </body>

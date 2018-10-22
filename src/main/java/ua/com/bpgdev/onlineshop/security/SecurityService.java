@@ -3,9 +3,8 @@ package ua.com.bpgdev.onlineshop.security;
 import ua.com.bpgdev.onlineshop.entity.User;
 import ua.com.bpgdev.onlineshop.security.entity.Session;
 import ua.com.bpgdev.onlineshop.service.UserService;
+import ua.com.bpgdev.onlineshop.util.PropertyLoader;
 
-import java.io.FileReader;
-import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.time.LocalDateTime;
@@ -19,9 +18,9 @@ public class SecurityService {
     private List<Session> sessionList = new ArrayList<>();
     private UserService userService;
 
-    public SecurityService(UserService userService) throws IOException {
-        Properties properties = new Properties();
-        properties.load(new FileReader("src/main/resources/property/security.properties"));
+    public SecurityService(UserService userService) {
+        PropertyLoader propertyLoader = new PropertyLoader();
+        Properties properties = propertyLoader.loadProperties("/resources/property/security.properties");
         sessionCookieMaxAge = Integer.valueOf(properties.getProperty("cookie.maxAge"));
 
         this.userService = userService;
