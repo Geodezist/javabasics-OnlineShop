@@ -45,7 +45,7 @@ public class Starter {
         // Server config
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
         //    - Servlets holders
-        context.addServlet(new ServletHolder(allProductsServlet), "/");
+        //context.addServlet(new ServletHolder(allProductsServlet), "/");
         context.addServlet(new ServletHolder(assetsServlet), "/assets/*");
 
         context.addServlet(new ServletHolder(loginServlet), "/login");
@@ -57,6 +57,8 @@ public class Starter {
         context.addServlet(new ServletHolder(addProductServlet), "/product/add");
         context.addServlet(new ServletHolder(updateProductServlet), "/product/edit/*");
         context.addServlet(new ServletHolder(deleteProductServlet), "/product/delete/*");
+
+
 
         //    - Filters
         AdminSecurityFilter adminSecurityFilter = new AdminSecurityFilter(securityService);

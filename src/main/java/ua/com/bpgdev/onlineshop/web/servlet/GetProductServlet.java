@@ -3,6 +3,7 @@ package ua.com.bpgdev.onlineshop.web.servlet;
 import ua.com.bpgdev.onlineshop.entity.Product;
 import ua.com.bpgdev.onlineshop.service.ProductService;
 import ua.com.bpgdev.onlineshop.web.templater.PageGenerator;
+import ua.com.bpgdev.onlineshop.web.util.IdParser;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -13,23 +14,16 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class GetProductServlet extends HttpServlet {
-    private final static Pattern PATTERN = Pattern.compile("^\\/([0-9]+)$");
     private final ProductService productService;
 
     @Override
     protected void doGet(HttpServletRequest request,
                          HttpServletResponse response) throws IOException {
         Product product = null;
-        String productID = "";
-
         try {
-            Matcher matcher = PATTERN.matcher(request.getPathInfo());
-            while (matcher.find()) {
-                productID = matcher.group(1);
-            }
-            product = productService.get(Integer.parseInt(productID));
+            product = productService.get(IdParser.getId(request.getPathInfo()));
         } catch (RuntimeException e) {
-            System.err.println("Product with id = " + productID + " does not exist in DB or link is invalid.");
+            System.err.println("Product with id = " + request.getPathInfo() + " does not exist in DB or link is invalid.");
         }
 
         HashMap<String, Object> params = new HashMap<>();

@@ -16,6 +16,8 @@
     <div class="card-body">
         <h5 class="card-title">${product.name}</h5>
         <p class="card-text">${product.price}</p>
+        <a class="btn btn-outline-primary btn-sm" href="/cart/add/${product.id}">Add to cart</a>
+        <a class="btn btn-outline-danger btn-sm" href="/cart/delete/${product.id}">Remove from cart</a>
     </div>
 </div>
 

@@ -29,7 +29,7 @@ public class AdminSecurityFilter implements Filter {
                 if (cookie.getName().equals("user-session")) {
                     String userToken = cookie.getValue();
                     Session session = securityService.getSession(userToken);
-                    if (session.getUser().getUserRole() == UserRole.ADMIN) {
+                    if (session != null && session.getUser().getUserRole() == UserRole.ADMIN) {
                         isAuth = true;
                     }
                     break;

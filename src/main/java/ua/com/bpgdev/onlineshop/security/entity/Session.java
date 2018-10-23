@@ -5,6 +5,7 @@ import ua.com.bpgdev.onlineshop.entity.Product;
 import ua.com.bpgdev.onlineshop.entity.User;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Session {
@@ -12,6 +13,14 @@ public class Session {
     private User user;
     private LocalDateTime expireDate;
     private List<Product> productList;
+
+    public Session() {
+        productList = new ArrayList<>();
+    }
+
+    public void addProductToCart(Product product){
+        productList.add(product);
+    }
 
     public String getToken() {
         return token;
