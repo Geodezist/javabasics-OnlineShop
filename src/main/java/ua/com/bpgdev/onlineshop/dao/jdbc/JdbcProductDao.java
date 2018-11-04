@@ -1,95 +1,77 @@
 package ua.com.bpgdev.onlineshop.dao.jdbc;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 import ua.com.bpgdev.onlineshop.dao.ProductDao;
 import ua.com.bpgdev.onlineshop.dao.jdbc.mapper.ProductRowMapper;
 import ua.com.bpgdev.onlineshop.entity.Product;
 
-import java.sql.*;
-import java.util.ArrayList;
+import javax.annotation.PostConstruct;
+import javax.sql.DataSource;
 import java.util.List;
 
-public class JdbcProductDao implements ProductDao {
-    private final Connection connection;
-    private final static ProductRowMapper PRODUCT_ROW_MAPPER = new ProductRowMapper();
+@Repository("productDao")
+public class JdbcProductDao implements ProductDao{
+    private static final ProductRowMapper PRODUCT_ROW_MAPPER = new ProductRowMapper();
+    private static final String SQL_GET_ALL_PRODUCTS =
+            "SELECT id, name, picture_path, price, add_date FROM product;";
+    private static final String SQL_GET_PRODUCT_BY_ID =
+            "SELECT id, name, picture_path, price, add_date FROM product Where id = ?;";
+    private static final String SQL_ADD_PRODUCT =
+            "INSERT INTO product (name, picture_path, price) VALUES (?,?,?);";
+    private static final String SQL_ADD_PRODUCT_WITH_ID =
+            "INSERT INTO product (id, name, picture_path, price) VALUES (?,?,?,?);";
+    private static final String SQL_UPDATE_PRODUCT =
+            "UPDATE product SET name = ?, picture_path = ?, price = ? WHERE id = ?;";
+    private static final String SQL_DELETE_PRODUCT =
+            "DELETE FROM product WHERE id = ?;";
 
-    public JdbcProductDao(Connection connection) {
-        this.connection = connection;
+    @Autowired
+    private DataSource dataSource;
+    private JdbcTemplate jdbcTemplate;
+
+    public JdbcProductDao() {
+    }
+    @PostConstruct
+    public void init(){
+        jdbcTemplate = new JdbcTemplate(dataSource);
+    }
+
+    public JdbcProductDao(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
 
     @Override
     public List<Product> getAll() {
-        try (PreparedStatement preparedStatement = connection.prepareStatement(
-                "SELECT id, name, picture_path, price, add_date FROM product;");
-             ResultSet resultSet = preparedStatement.executeQuery()) {
-
-            List<Product> productList = new ArrayList<>();
-            while (resultSet.next()) {
-                Product product = PRODUCT_ROW_MAPPER.mapRow(resultSet);
-                productList.add(product);
-            }
-            return productList;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        return jdbcTemplate.query(SQL_GET_ALL_PRODUCTS, PRODUCT_ROW_MAPPER);
     }
 
     @Override
     public Product get(int id) {
-        try (PreparedStatement preparedStatement = connection.prepareStatement(
-                "SELECT id, name, picture_path, price, add_date FROM product Where id = ?;")
-        ) {
-            preparedStatement.setInt(1, id);
-            try (ResultSet resultSet = preparedStatement.executeQuery()
-            ) {
-                resultSet.next();
-                return PRODUCT_ROW_MAPPER.mapRow(resultSet);
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        return jdbcTemplate.queryForObject(SQL_GET_PRODUCT_BY_ID, new Object[] {id}, PRODUCT_ROW_MAPPER);
     }
 
     @Override
     public void add(Product product) {
-        try (PreparedStatement preparedStatement = connection.prepareStatement(
-                "INSERT INTO product (name, picture_path, price) VALUES (?,?,?);")
-        ) {
-            preparedStatement.setString(1, product.getName());
-            preparedStatement.setString(2, product.getPicturePath());
-            preparedStatement.setDouble(3, product.getPrice());
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        jdbcTemplate.update(SQL_ADD_PRODUCT, product.getName(), product.getPicturePath(), product.getPrice());
+    }
+
+    void addWithID(Product product){
+        jdbcTemplate.update(SQL_ADD_PRODUCT_WITH_ID, product.getId(), product.getName(), product.getPicturePath(), product.getPrice());
     }
 
     @Override
     public void update(Product product) {
-        try (PreparedStatement preparedStatement = connection.prepareStatement(
-                "UPDATE product SET name = ?, picture_path = ?, price = ? WHERE id = ?;")
-        ) {
-            preparedStatement.setString(1, product.getName());
-            preparedStatement.setString(2, product.getPicturePath());
-            preparedStatement.setDouble(3, product.getPrice());
-            preparedStatement.setInt(4, product.getId());
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
+        jdbcTemplate.update(SQL_UPDATE_PRODUCT, product.getName(), product.getPicturePath(), product.getPrice(),product.getId());
     }
 
     @Override
     public void delete(int id) {
-        try (PreparedStatement preparedStatement = connection.prepareStatement(
-                "DELETE FROM product WHERE id = ?;")
-        ) {
-            preparedStatement.setInt(1, id);
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        jdbcTemplate.update(SQL_DELETE_PRODUCT, id);
+    }
+
+    public void setDataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
 }

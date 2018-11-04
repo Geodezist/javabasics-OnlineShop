@@ -1,9 +1,11 @@
 package ua.com.bpgdev.onlineshop.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import ua.com.bpgdev.onlineshop.entity.User;
 import ua.com.bpgdev.onlineshop.security.entity.Session;
 import ua.com.bpgdev.onlineshop.service.UserService;
-import ua.com.bpgdev.onlineshop.util.PropertyLoader;
+import ua.com.bpgdev.onlineshop.util.PropertyFromFileFactory;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -13,14 +15,20 @@ import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
 
+@Service
 public class SecurityService {
     private static int sessionCookieMaxAge;
     private List<Session> sessionList = new ArrayList<>();
+    @Autowired
     private UserService userService;
 
+    public SecurityService() {
+        this(null);
+    }
+
     public SecurityService(UserService userService) {
-        PropertyLoader propertyLoader = new PropertyLoader();
-        Properties properties = propertyLoader.loadProperties("/resources/property/security.properties");
+        PropertyFromFileFactory propertyLoader = new PropertyFromFileFactory();
+        Properties properties = propertyLoader.loadProperties("/property/security.properties");
         sessionCookieMaxAge = Integer.valueOf(properties.getProperty("cookie.maxAge"));
 
         this.userService = userService;
@@ -55,6 +63,18 @@ public class SecurityService {
             }
         }
         return null;
+    }
+
+    public static void setSessionCookieMaxAge(int sessionCookieMaxAge) {
+        SecurityService.sessionCookieMaxAge = sessionCookieMaxAge;
+    }
+
+    public void setSessionList(List<Session> sessionList) {
+        this.sessionList = sessionList;
+    }
+
+    public void setUserService(UserService userService) {
+        this.userService = userService;
     }
 
     public static int getSessionCookieMaxAge() {

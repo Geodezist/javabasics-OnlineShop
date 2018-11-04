@@ -52,7 +52,7 @@ public class Product {
     public Product(String name, String price, String picturePath) {
         this.name = name;
         this.picturePath = picturePath;
-        this.price = Double.valueOf(price);
+        this.price = Double.parseDouble(price);
     }
 
     public Product() {

@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-public class PropertyLoader {
+public class PropertyFromFileFactory {
     public Properties loadProperties(String propertyFileName)
     {
         final File propertyFile = new File(propertyFileName);

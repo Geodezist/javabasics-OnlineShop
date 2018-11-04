@@ -1,64 +1,59 @@
 package ua.com.bpgdev.onlineshop.dao.jdbc;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 import ua.com.bpgdev.onlineshop.dao.UserDao;
 import ua.com.bpgdev.onlineshop.dao.jdbc.mapper.UserRowMapper;
 import ua.com.bpgdev.onlineshop.entity.User;
-import ua.com.bpgdev.onlineshop.security.PasswordHashFactory;
-import ua.com.bpgdev.onlineshop.security.entity.PasswordEntity;
-import ua.com.bpgdev.onlineshop.security.entity.UserRole;
 
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
-import java.sql.Connection;
+import javax.annotation.PostConstruct;
+import javax.sql.DataSource;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+@Repository("userDao")
 public class JdbcUserDao implements UserDao {
-    private static final String GET_USER_BY_LOGIN_SQL =
+    private static final String SQL_GET_USER_BY_LOGIN =
             "SELECT id, login, password_hash, salt, iterations, role FROM \"user\" WHERE UPPER(login) = UPPER(?);";
-    private static final String ADD_USER =
+    private static final String SQL_ADD_USER =
             "INSERT INTO \"user\" (login, password_hash, salt, iterations, role) VALUES (?, ?, ?, ?, ?);";
 
-    private final static UserRowMapper USER_ROW_MAPPER = new UserRowMapper();
-    private final Connection connection;
+    private static final UserRowMapper USER_ROW_MAPPER = new UserRowMapper();
 
+    @Autowired
+    private DataSource dataSource;
+    private JdbcTemplate jdbcTemplate;
 
-    public JdbcUserDao(Connection connection) {
-        this.connection = connection;
+    public JdbcUserDao() {
+    }
+
+    public JdbcUserDao(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
+    @PostConstruct
+    public void init() {
+        jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
     @Override
     public User getUser(String login) {
-        try (PreparedStatement preparedStatement = connection.prepareStatement(GET_USER_BY_LOGIN_SQL)) {
-
-            preparedStatement.setString(1, login);
-
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                if (resultSet.next()) {
-                    return USER_ROW_MAPPER.mapRow(resultSet);
-                }
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return null;
+        return jdbcTemplate.queryForObject(SQL_GET_USER_BY_LOGIN, new Object[]{login}, USER_ROW_MAPPER);
     }
 
     @Override
     public void add(User user) {
-        try (PreparedStatement preparedStatement = connection.prepareStatement(ADD_USER)) {
+        jdbcTemplate.update(SQL_ADD_USER,
+                user.getLogin(),
+                user.getPasswordHash(),
+                user.getSalt(),
+                user.getIterations(),
+                user.getUserRole().toString());
+    }
 
-            preparedStatement.setString(1, user.getLogin());
-            preparedStatement.setString(2, user.getPasswordHash());
-            preparedStatement.setString(3, user.getSalt());
-            preparedStatement.setInt(4, user.getIterations());
-            preparedStatement.setString(5, user.getUserRole().toString());
-
-            preparedStatement.executeUpdate();
-
-        } catch (SQLException e){
-            throw new RuntimeException(e);
-        }
+    public void setDataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
 }

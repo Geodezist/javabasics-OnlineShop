@@ -1,0 +1,4 @@
+url: jdbc:postgresql://localhost:5432/online_shop
+username: online_shop
+password: online_shop
+driverClassName: org.postgresql.ds.PGPoolingDataSource

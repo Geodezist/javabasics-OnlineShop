@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <import resource="dispatcherServlet-context.xml"/>
+
+    <context:component-scan base-package="ua.com.bpgdev.onlineshop.dao"/>
+    <context:component-scan base-package="ua.com.bpgdev.onlineshop.service"/>
+    <context:component-scan base-package="ua.com.bpgdev.onlineshop.security"/>
+
+
+    <mvc:annotation-driven/>
+    <!--
+
+       <bean id="dataSource" class="ua.com.bpgdev.onlineshop.dao.jdbc.datasource.SpringPostgresDataSource"/>
+
+       <bean id="productDao" class="ua.com.bpgdev.onlineshop.dao.jdbc.JdbcProductDao" init-method="init">
+           <property name="dataSource">
+               <bean factory-bean="springPostgresDataSource" factory-method="getDataSource"/>
+           </property>
+       </bean>
+
+       <bean id="userDao" class="ua.com.bpgdev.onlineshop.dao.jdbc.JdbcUserDao"  init-method="init">
+           <property name="dataSource">
+               <bean factory-bean="springPostgresDataSource" factory-method="getDataSource"/>
+           </property>
+       </bean>
+       <bean id="productService" class="ua.com.bpgdev.onlineshop.service.DefaultProductService">
+           <property name="productDao" ref="productDao"/>
+       </bean>
+
+       <bean id="securityService" class="ua.com.bpgdev.onlineshop.security.SecurityService">
+           <property name="userService" ref="userService"/>
+       </bean>
+
+       <bean id="userService" class="ua.com.bpgdev.onlineshop.service.DefaultUserService">
+           <property name="userDao" ref="userDao"/>
+       </bean>
+   -->
+
+</beans>

@@ -39,7 +39,7 @@ public class PageGenerator {
 
     private PageGenerator() {
         cfg = new Configuration(Configuration.VERSION_2_3_28);
-        cfg.setClassForTemplateLoading(this.getClass(), "/resources");
+        cfg.setClassForTemplateLoading(this.getClass(), "/");
     }
 
 }

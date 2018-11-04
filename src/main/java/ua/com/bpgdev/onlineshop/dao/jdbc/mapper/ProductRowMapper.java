@@ -1,13 +1,16 @@
 package ua.com.bpgdev.onlineshop.dao.jdbc.mapper;
 
+import org.springframework.jdbc.core.RowMapper;
 import ua.com.bpgdev.onlineshop.entity.Product;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 
-public class ProductRowMapper {
-    public Product mapRow(ResultSet resultSet) throws SQLException {
+public class ProductRowMapper implements RowMapper<Product> {
+
+    @Override
+    public Product mapRow(ResultSet resultSet, int rowNum) throws SQLException {
 
         int id = resultSet.getInt("id");
         String name = resultSet.getString("name");

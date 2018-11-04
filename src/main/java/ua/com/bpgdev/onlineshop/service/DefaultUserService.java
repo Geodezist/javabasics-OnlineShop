@@ -1,5 +1,7 @@
 package ua.com.bpgdev.onlineshop.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import ua.com.bpgdev.onlineshop.dao.UserDao;
 import ua.com.bpgdev.onlineshop.entity.User;
 import ua.com.bpgdev.onlineshop.security.PasswordHashFactory;
@@ -11,8 +13,17 @@ import java.security.spec.InvalidKeySpecException;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+@Service("userService")
 public class DefaultUserService implements UserService {
-    private final UserDao userDao;
+    @Autowired
+    private UserDao userDao;
+
+    public DefaultUserService() {
+    }
+
+    public void setUserDao(UserDao userDao) {
+        this.userDao = userDao;
+    }
 
     @Override
     public User getUser(String userName) {
