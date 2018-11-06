@@ -19,14 +19,9 @@ import java.util.UUID;
 public class SecurityService {
     private static int sessionCookieMaxAge;
     private List<Session> sessionList = new ArrayList<>();
-    @Autowired
     private UserService userService;
 
-    public SecurityService() {
-        this(null);
-    }
-
-    public SecurityService(UserService userService) {
+    public SecurityService(@Autowired UserService userService) {
         PropertyFromFileFactory propertyLoader = new PropertyFromFileFactory();
         Properties properties = propertyLoader.loadProperties("/property/security.properties");
         sessionCookieMaxAge = Integer.valueOf(properties.getProperty("cookie.maxAge"));
@@ -77,7 +72,7 @@ public class SecurityService {
         this.userService = userService;
     }
 
-    public static int getSessionCookieMaxAge() {
+    public int getSessionCookieMaxAge() {
         return sessionCookieMaxAge;
     }
 }

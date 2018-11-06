@@ -9,6 +9,15 @@ public class Product {
     private double price;
     private LocalDateTime addDate;
 
+    public Product() {
+    }
+
+    public Product(String name, String price, String picturePath) {
+        this.name = name;
+        this.picturePath = picturePath;
+        this.price = Double.parseDouble(price);
+    }
+
     public int getId() {
         return id;
     }
@@ -49,12 +58,14 @@ public class Product {
         this.addDate = addDate;
     }
 
-    public Product(String name, String price, String picturePath) {
-        this.name = name;
-        this.picturePath = picturePath;
-        this.price = Double.parseDouble(price);
-    }
-
-    public Product() {
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", picturePath='" + picturePath + '\'' +
+                ", price=" + price +
+                ", addDate=" + addDate +
+                '}';
     }
 }

@@ -6,7 +6,7 @@
             </Pattern>
         </encoder>
     </appender>
-    <logger name="ua.com.bpgdev.customioc" level="TRACE"/>
+    <logger name="ua.com.bpgdev.onlineshop" level="TRACE"/>
     <root level="info">
         <appender-ref ref="STDOUT"/>
     </root>

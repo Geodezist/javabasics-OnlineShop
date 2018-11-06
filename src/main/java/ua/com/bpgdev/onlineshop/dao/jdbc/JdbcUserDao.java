@@ -19,17 +19,12 @@ public class JdbcUserDao implements UserDao {
             "SELECT id, login, password_hash, salt, iterations, role FROM \"user\" WHERE UPPER(login) = UPPER(?);";
     private static final String SQL_ADD_USER =
             "INSERT INTO \"user\" (login, password_hash, salt, iterations, role) VALUES (?, ?, ?, ?, ?);";
-
     private static final UserRowMapper USER_ROW_MAPPER = new UserRowMapper();
 
-    @Autowired
     private DataSource dataSource;
     private JdbcTemplate jdbcTemplate;
 
-    public JdbcUserDao() {
-    }
-
-    public JdbcUserDao(DataSource dataSource) {
+    public JdbcUserDao(@Autowired DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
@@ -40,7 +35,7 @@ public class JdbcUserDao implements UserDao {
 
     @Override
     public User getUser(String login) {
-        return jdbcTemplate.queryForObject(SQL_GET_USER_BY_LOGIN, new Object[]{login}, USER_ROW_MAPPER);
+        return jdbcTemplate.queryForObject(SQL_GET_USER_BY_LOGIN, USER_ROW_MAPPER, login);
     }
 
     @Override

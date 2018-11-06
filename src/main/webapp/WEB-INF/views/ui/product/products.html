@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="/ui/common/commonFragments :: bootstrapHeaderFragment"></div>
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <title>List of all products</title>
+</head>
+
+<body>
+<nav th:replace="/ui/common/commonFragments :: headerFragment"></nav>
+<h1>Products:</h1>
+
+<table class="table table-striped table-hover table-sm">
+    <thead>
+    <tr>
+        <th scope="col" style="width: 5%">#</th>
+        <th scope="col" style="width: 200px"></th>
+        <th scope="col">Name</th>
+        <th scope="col" style="width: 15%">Price</th>
+        <th scope="col" style="width: 15%" class="text-center">Actions</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr th:each="product: ${products}">
+        <th scope="row" class='clickable-row' th:attr="data-href='/ui/product/'+${product.id}"
+            th:text="${product.id}"></th>
+        <td class='clickable-row' th:attr="data-href='/ui/product/'+${product.id}">
+            <img th:src="${product.picturePath}"
+                 class="img-fluid"
+                 width="200" height="200"
+                 th:alt="${product.name}"></td>
+        <td class='clickable-row' th:attr="data-href='/ui/product/'+${product.id}" th:text="${product.name}"></td>
+        <td class='clickable-row' th:attr="data-href='/ui/product/'+${product.id}" th:text="${#numbers.formatDecimal(product.price,1,'WHITESPACE', 2, 'POINT')}"></td>
+        <td class="text-center">
+            <a class="btn btn-outline-primary btn-sm" th:href="@{'/ui/product/edit/' + ${product.id}}">Edit</a>
+            <a class="btn btn-outline-danger btn-sm" th:href="@{'/ui/product/delete/' + ${product.id}}">Delete</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<footer th:include="/ui/common/commonFragments :: footerFragment"></footer>
+<footer th:include="/ui/common/commonFragments :: bootstrapFooterFragment"></footer>
+<script>
+    jQuery(document).ready(function ($) {
+        $(".clickable-row").click(function () {
+            window.location = $(this).data("href");
+        });
+    });
+</script>
+</body>
+</html>

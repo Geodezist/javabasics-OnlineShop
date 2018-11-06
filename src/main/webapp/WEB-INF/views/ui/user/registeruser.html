@@ -1,14 +1,15 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <#include "bootstrapheader.ftl">
+    <div th:replace="/ui/common/commonFragments :: bootstrapHeaderFragment"></div>
     <link rel="stylesheet" href="/assets/css/signin.css">
     <title>Please login</title>
 </head>
 
 <body class="text-center">
 
-<form class="form-signin" action="/register" method="POST">
+
+<form class="form-signin" action="/ui/register" method="POST">
 
     <h1 class="h1 mb-3 font-weight-normal">Online Shop</h1>
     <h1 class="h3 mb-3 font-weight-normal">Please register</h1>
@@ -28,6 +29,9 @@
     <p class="mt-5 mb-3 text-muted">&copy; 2017-2018</p>
 </form>
 
-<#include "bootstrapfooter.ftl">
+<footer th:include="/ui/common/commonFragments :: bootstrapFooterFragment">
+
+</footer>
+
 </body>
 </html>

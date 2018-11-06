@@ -15,13 +15,10 @@ import java.sql.SQLException;
 
 @Service("userService")
 public class DefaultUserService implements UserService {
-    @Autowired
+
     private UserDao userDao;
 
-    public DefaultUserService() {
-    }
-
-    public void setUserDao(UserDao userDao) {
+    public DefaultUserService(@Autowired UserDao userDao) {
         this.userDao = userDao;
     }
 
@@ -32,7 +29,7 @@ public class DefaultUserService implements UserService {
 
     @Override
     public void add(String login, String password, String role) {
-        try  {
+        try {
             PasswordEntity passwordEntity = PasswordHashFactory.generatePasswordEntity(password);
             User newUser = new User();
             newUser.setLogin(login);
@@ -43,12 +40,10 @@ public class DefaultUserService implements UserService {
 
             userDao.add(newUser);
 
-        } catch ( NoSuchAlgorithmException | InvalidKeySpecException e){
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public DefaultUserService(UserDao userDao) {
-        this.userDao = userDao;
-    }
+
 }

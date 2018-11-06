@@ -4,12 +4,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.dao.EmptyResultDataAccessException;
-import ua.com.bpgdev.onlineshop.dao.jdbc.datasource.HikariPostgresDataSource;
 import ua.com.bpgdev.onlineshop.dao.jdbc.datasource.SpringPostgresDataSource;
 import ua.com.bpgdev.onlineshop.entity.Product;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,7 +30,7 @@ public class JdbcProductDaoTest {
         product.setPicturePath("BBB");
         product.setPrice(222.2);
 
-        jdbcProductDao.addWithID(product);
+        jdbcProductDao.addWithId(product);
     }
 
     @After

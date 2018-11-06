@@ -9,19 +9,13 @@ import java.util.List;
 
 @Service("productService")
 public class DefaultProductService implements ProductService {
-    @Autowired
+
     private ProductDao productDao;
 
-    public DefaultProductService() {
-    }
-
-    public ProductDao getProductDao() {
-        return productDao;
-    }
-
-    public DefaultProductService(ProductDao productDao) {
+    public DefaultProductService(@Autowired ProductDao productDao) {
         this.productDao = productDao;
     }
+
 
     @Override
     public List<Product> getAll() {
@@ -46,6 +40,10 @@ public class DefaultProductService implements ProductService {
     @Override
     public void delete(int id) {
         productDao.delete(id);
+    }
+
+    public ProductDao getProductDao() {
+        return productDao;
     }
 
     public void setProductDao(ProductDao productDao) {

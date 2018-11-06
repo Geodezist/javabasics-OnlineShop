@@ -14,14 +14,15 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class AdminSecurityInterceptor extends HandlerInterceptorAdapter {
-    private static Logger LOG = LoggerFactory.getLogger(AdminSecurityInterceptor.class);
+    private final Logger LOG = LoggerFactory.getLogger(getClass());
     @Autowired
     private SecurityService securityService;
 
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException {
-        LOG.info("---------->>>>  START Applying filter");
+        String requestURI = request.getRequestURI();
+        LOG.debug("---------->>>>  START Applying filter for {}", requestURI);
         boolean isAuth = false;
 
         Cookie[] cookies = request.getCookies();
@@ -39,11 +40,11 @@ public class AdminSecurityInterceptor extends HandlerInterceptorAdapter {
         }
 
         if (!isAuth) {
-            response.sendRedirect("/login");
-            LOG.info("---------->>>>  STOP Applying filter - DENY!");
+            response.sendRedirect("/ui/login");
+            LOG.debug("---------->>>>  STOP Applying filter - DENY  for {}", requestURI);
             return false;
         }
-        LOG.info("---------->>>>  STOP Applying filter - ALLOW!");
+        LOG.debug("---------->>>>  STOP Applying filter - ALLOW for {}", requestURI);
         return true;
     }
 }

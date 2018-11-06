@@ -1,25 +1,26 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <#include "bootstrapheader.ftl">
+    <div th:replace="/ui/common/commonFragments :: bootstrapHeaderFragment"></div>
     <link rel="stylesheet" href="/assets/css/style.css">
-    <title>Edit product</title>
+    <title>List of all products</title>
 </head>
+
 <body>
-<#include "header.ftl">
-<h1>Edit product:</h1>
+<nav th:replace="/ui/common/commonFragments :: headerFragment"></nav>
 
-<#if operationSuccess??>
-    <h6 class="text-success">${operationSuccess}</h6>
+<h1>Add product:</h1>
+
+<div th:if="${operationSuccess}" th:remove="tag">
+    <h6 class="text-success" th:text="${operationSuccess}"></h6>
     <br>
-<#else>
-</#if>
+</div>
 
-<form action="/product/edit/${product.id}" method="POST">
+<form action="/ui/product/add" method="POST">
     <div class="form-group">
         <label for="productNameLabel">Name of the product</label>
         <input type="text" class="form-control" name="productName" maxlength="250" aria-describedby="productNameHelp"
-               value="${product.name}">
+               placeholder="Enter product name here">
         <small name="productNameHelp" class="form-text text-muted">Here you can enter product name. Maximum size of the
             name is 250 chars.
         </small>
@@ -27,21 +28,22 @@
     <div class="form-group">
         <label for="priceLabel">Price of the product</label>
         <input type="number" step="0.01" class="form-control" name="price"
-               value="${product.price?string(",##0.00")}">
+               placeholder="Enter price of the product here.">
     </div>
     <div class="form-group">
         <label for="picturePathLabel">Picture of the product link</label>
         <input type="text" class="form-control" name="picturePath" aria-describedby="picturePathHelp"
-               value="${product.picturePath}">
+               placeholder="Enter link to the picture of the product here.">
         <small name="picturePathHelp" class="form-text text-muted">Link must be with &quot;http&ratio;&#8725;&#8725;&quot;
             part!
         </small>
     </div>
-    <button type="submit" class="btn btn-primary">Save</button>
+    <button type="submit" class="btn btn-primary">Add product</button>
 </form>
 <br>
 
-<#include "footer.ftl">
-<#include "bootstrapfooter.ftl">
+
+<footer th:include="/ui/common/commonFragments :: footerFragment"></footer>
+<footer th:include="/ui/common/commonFragments :: bootstrapFooterFragment"></footer>
 </body>
 </html>

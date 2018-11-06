@@ -20,10 +20,10 @@ public class UserSecurityInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        LOG.info("---------->>>>  START Applying filter");
-        String pathInfo = request.getServletPath();
-        if (pathInfo.equals("/login") || pathInfo.startsWith("/assets")) {
-            LOG.info("---------->>>>  STOP Applying filter - ALLOW (login or assets pages)!");
+        String requestURI = request.getRequestURI();
+        LOG.debug("---------->>>>  START Applying filter for {}", requestURI);
+        if (requestURI.equals("/ui/login")) {
+            LOG.info("---------->>>>  STOP Applying filter - ALLOW (login or assets pages) for {}", requestURI);
             return true;
         }
 
@@ -47,11 +47,11 @@ public class UserSecurityInterceptor extends HandlerInterceptorAdapter {
             }
         }
         if (!isAuth) {
-            response.sendRedirect("/login");
-            LOG.info("---------->>>>  STOP Applying filter - DENY!");
+            response.sendRedirect("/ui/login");
+            LOG.info("---------->>>>  STOP Applying filter - DENY for {}", requestURI);
             return false;
         }
-        LOG.info("---------->>>>  STOP Applying filter - ALLOW!");
+        LOG.info("---------->>>>  STOP Applying filter - ALLOW for {}", requestURI);
         return true;
     }
 }
